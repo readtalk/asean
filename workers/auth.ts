@@ -44,7 +44,7 @@ export default {
       theme: {
         title: "Authentication",
         primary: "#FFFFFF",
-        favicon: "https://service.readtalk.workers.dev/logo.png",
+        favicon: "https://raw.githubusercontent.com/readtalk/asean/refs/heads/main/public/favicon.ico",
         logo: { dark: "https://raw.githubusercontent.com/readtalk/asean/refs/heads/main/public/brand.png", light: "https://service.readtalk.workers.dev/logo.png" },
       },
       success: async (ctx, value) => {
