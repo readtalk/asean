@@ -45,7 +45,7 @@ export default {
         title: "Authentication",
         primary: "#FFFFFF",
         favicon: "https://service.readtalk.workers.dev/logo.png",
-        logo: { dark: "https://service.readtalk.workers.dev/logo.png", light: "https://service.readtalk.workers.dev/logo.png" },
+        logo: { dark: "https://raw.githubusercontent.com/readtalk/asean/refs/heads/main/public/brand.png", light: "https://service.readtalk.workers.dev/logo.png" },
       },
       success: async (ctx, value) => {
         const userId = await getOrCreateUser(env, value.email);
