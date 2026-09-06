@@ -1,5 +1,4 @@
 import { createRequestHandler, RouterContextProvider } from "react-router";
-import { authContext } from "~/app/context";
 import { createAuthHandler } from "./auth";
 
 const routerHandler = createRequestHandler(
@@ -17,13 +16,8 @@ export default {
       return auth.fetch(request, env, ctx);
     }
 
-    // 🔐 Ambil data user dari sesi (contoh)
-    const userId = request.headers.get("x-user-id") || "anonymous";
-    const email = request.headers.get("x-user-email") || "unknown";
-
-    // 📦 Set context
+    // React Router
     const context = new RouterContextProvider();
-    context.set(authContext, { userId, email });
     context.set("cloudflare", { env, ctx });
 
     return routerHandler(request, context);
