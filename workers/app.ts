@@ -12,7 +12,7 @@ const subjects = createSubjects({
 
 // OpenAuth Issuer
 const authHandler = issuer({
-  storage: CloudflareStorage({ namespace: env.AUTH_STORAGE }),
+  storage: CloudflareStorage({ namespace: env.AUTH_KV }),
   subjects,
   providers: {
     password: PasswordProvider(
