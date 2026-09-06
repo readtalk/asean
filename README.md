@@ -2,8 +2,6 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/react-router-starter-template)
 
-![React Router Starter Template Preview](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/bfdc2f85-e5c9-4c92-128b-3a6711249800/public)
-
 <!-- dash-content-start -->
 
 A modern, production-ready template for building full-stack React applications using [React Router](https://reactrouter.com/) and the [Cloudflare Vite plugin](https://developers.cloudflare.com/workers/vite-plugin/).
@@ -21,6 +19,39 @@ A modern, production-ready template for building full-stack React applications u
 <!-- dash-content-end -->
 
 ## Getting Started
+
+```
+root/
+├── app/                              ← Aplikasi React Router
+│   ├── routes/
+│   │   └── home.tsx                  ← Halaman home
+│   ├── welcome/
+│   │   ├── logo-dark.svg
+│   │   ├── logo-light.svg
+│   │   └── welcome.tsx
+│   ├── app.css
+│   ├── entry.server.tsx              ← Entry server (SSR)
+│   ├── root.tsx                      ← Root layout
+│   └── routes.ts                     ← Definisi routes
+│
+├── public/
+│   └── favicon.ico
+│
+├── workers/
+│   └── app.ts                        ← Entry point Cloudflare Worker
+│
+├── .gitignore
+├── package.json
+├── package-lock.json
+├── README.md
+├── react-router.config.ts
+├── tsconfig.json
+├── tsconfig.cloudflare.json
+├── tsconfig.node.json
+├── vite.config.ts
+├── worker-configuration.d.ts
+└── wrangler.json
+```
 
 Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
 
