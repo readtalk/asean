@@ -17,17 +17,16 @@ export function createAuthHandler(env: Env) {
       password: PasswordProvider(
         PasswordUI({
           sendCode: async (email, code) => {
-            console.log(`Sending code ${code} to ${email}`);
+            console.log(`Kode untuk ${email}: ${code}`);
           },
-          copy: { input_code: "Code (check Worker logs)" },
+          copy: { input_code: "Masukkan kode dari log" },
         }),
       ),
     },
     theme: {
-      title: "Authentication",
+      title: "Login",
       primary: "#FFFFFF",
       favicon: "https://raw.githubusercontent.com/readtalk/asean/refs/heads/main/public/favicon.ico",
-      logo: { dark: "https://raw.githubusercontent.com/readtalk/asean/refs/heads/main/public/brand.png", light: "https://service.readtalk.workers.dev/logo.png" },
     },
     success: async (ctx, value) => {
       const userId = await getOrCreateUser(env, value.email);
@@ -42,6 +41,6 @@ async function getOrCreateUser(env: Env, email: string): Promise<string> {
   )
     .bind(email)
     .first<{ id: string }>();
-  if (!result) throw new Error(`Unable to process user: ${email}`);
+  if (!result) throw new Error(`Gagal proses user: ${email}`);
   return result.id;
 }
