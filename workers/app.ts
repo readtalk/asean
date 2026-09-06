@@ -10,11 +10,13 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
     const url = new URL(request.url);
 
+    // OpenAuth
     if (url.pathname === "/authorize" || url.pathname === "/callback") {
-      const authHandler = createAuthHandler(env);
-      return authHandler.fetch(request, env, ctx);
+      const auth = createAuthHandler(env);
+      return auth.fetch(request, env, ctx);
     }
 
+    // React Router
     const context = new RouterContextProvider();
     context.set("cloudflare", { env, ctx });
     return routerHandler(request, context);
