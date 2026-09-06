@@ -22,9 +22,9 @@ A modern, production-ready template for building full-stack React applications u
 
 ```
 root/
-├── app/                              ← Aplikasi React Router
+├── app/                              ← React Router App
 │   ├── routes/
-│   │   └── home.tsx                  ← Halaman home
+│   │   └── home.tsx                  ← Home pages
 │   ├── welcome/
 │   │   ├── logo-dark.svg
 │   │   ├── logo-light.svg
