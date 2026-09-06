@@ -10,32 +10,6 @@ const subjects = createSubjects({
   user: object({ id: string() }),
 });
 
-// OpenAuth Issuer
-const authHandler = issuer({
-  storage: CloudflareStorage({ namespace: env.AUTH_KV }),
-  subjects,
-  providers: {
-    password: PasswordProvider(
-      PasswordUI({
-        sendCode: async (email, code) => {
-          console.log(`Sending code ${code} to ${email}`);
-        },
-        copy: { input_code: "Code (check Worker logs)" },
-      }),
-    ),
-  },
-  theme: {
-    title: "Authentication",
-    primary: "#FFFFFF",
-    favicon: "https://raw.githubusercontent.com/readtalk/asean/refs/heads/main/public/favicon.ico",
-    logo: { dark: "https://raw.githubusercontent.com/readtalk/asean/refs/heads/main/public/brand.png", light: "https://service.readtalk.workers.dev/logo.png" },
-  },
-  success: async (ctx, value) => {
-    const userId = await getOrCreateUser(env, value.email);
-    return ctx.subject("user", { id: userId });
-  },
-});
-
 async function getOrCreateUser(env: Env, email: string): Promise<string> {
   const result = await env.AUTH_DB.prepare(
     `INSERT INTO user (email) VALUES (?) ON CONFLICT (email) DO UPDATE SET email = email RETURNING id;`
@@ -46,7 +20,6 @@ async function getOrCreateUser(env: Env, email: string): Promise<string> {
   return result.id;
 }
 
-// React Router Request Handler
 const routerHandler = createRequestHandler(
   () => import("virtual:react-router/server-build"),
   import.meta.env.MODE,
@@ -56,7 +29,34 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
     const url = new URL(request.url);
 
-    // 1. Tangani endpoint OAuth terlebih dahulu
+    // Inisialisasi authHandler di dalam fetch, setelah env tersedia
+    const authHandler = issuer({
+      storage: CloudflareStorage({ namespace: env.AUTH_KV }),
+      subjects,
+      providers: {
+        password: PasswordProvider(
+          PasswordUI({
+            sendCode: async (email, code) => {
+              console.log(`Sending code ${code} to ${email}`);
+            },
+            copy: { input_code: "Code (check Worker logs)" },
+          }),
+        ),
+      },
+      theme: {
+        title: "Authentication",
+        primary: "#FFFFFF",
+        favicon: "https://raw.githubusercontent.com/readtalk/asean/refs/heads/main/public/favicon.ico",
+        logo: { dark: "https://raw.githubusercontent.com/readtalk/asean/refs/heads/main/public/brand.png", 
+               light: "https://raw.githubusercontent.com/readtalk/asean/refs/heads/main/public/brand.png" },
+      },
+      success: async (ctx, value) => {
+        const userId = await getOrCreateUser(env, value.email);
+        return ctx.subject("user", { id: userId });
+      },
+    });
+
+    // 1. Tangani endpoint OAuth
     if (url.pathname.startsWith("/authorize") || url.pathname.startsWith("/callback")) {
       return authHandler.fetch(request, env, ctx);
     }
