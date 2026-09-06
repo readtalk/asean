@@ -3,9 +3,6 @@ import type { Config } from "@react-router/dev/config";
 export default {
 	ssr: true,
 	future: {
-		// Ganti nama flag lama ke yang baru
-		v8_viteEnvironmentApi: true,
-		// Tambahkan semua flag di bawah ini
 		v8_middleware: true,
 		v8_splitRouteModules: true,
 		v8_passThroughRequests: true,
