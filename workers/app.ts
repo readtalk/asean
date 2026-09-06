@@ -10,13 +10,11 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
     const url = new URL(request.url);
 
-    // 🔐 OpenAuth untuk endpoint /authorize dan /callback
     if (url.pathname === "/authorize" || url.pathname === "/callback") {
       const authHandler = createAuthHandler(env);
       return authHandler.fetch(request, env, ctx);
     }
 
-    // 🧭 React Router untuk semua route lainnya
     const context = new RouterContextProvider();
     context.set("cloudflare", { env, ctx });
     return routerHandler(request, context);
