@@ -1,4 +1,4 @@
-# Welcome to React Router + Cloudflare Workers! v 8.0.0
+# Welcome to React Router + Cloudflare Workers! v8.3.1
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/react-router-starter-template)
 
