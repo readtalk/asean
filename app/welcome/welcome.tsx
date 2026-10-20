@@ -43,7 +43,7 @@ export function Welcome({ message }: { message: string }) {
 						<div className="pt-4 border-t border-gray-200 dark:border-gray-700">
 							<button
 								onClick={() => {
-									window.location.href = "https://auth.soeparnocorp.workers.dev/authorize?client_id=your-client-id&redirect_uri=https://asean.readtalk.workers.dev/callback&response_type=code&state=/dashboard";
+									window.location.href = "https://openauth.readtalk.workers.dev/authorize?client_id=your-client-id&redirect_uri=https://asean.readtalk.workers.dev/callback&response_type=code&state=/home";
 								}}
 								className="w-full px-6 py-3 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 transition-colors"
 							>
