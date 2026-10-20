@@ -12,14 +12,27 @@ export function Welcome({ message }: { message: string }) {
 		if (session) {
 			setIsLoggedIn(true);
 			try {
-				const payload = JSON.parse(atob(session.split(".")[1]));
-				if (payload.sub && payload.sub.email) {
-					setEmail(payload.sub.email);
-				} else if (payload.email) {
+				const base64Url = session.split(".")[1];
+				const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+				const jsonPayload = decodeURIComponent(
+					window.atob(base64)
+						.split("")
+						.map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+						.join("")
+				);
+				const payload = JSON.parse(jsonPayload);
+				
+				alert(JSON.stringify(payload, null, 2));
+				
+				if (payload.email) {
 					setEmail(payload.email);
+				} else if (payload.properties && payload.properties.email) {
+					setEmail(payload.properties.email);
+				} else if (payload.sub && typeof payload.sub === 'object' && payload.sub.email) {
+					setEmail(payload.sub.email);
 				}
 			} catch (e) {
-				console.error("Gagal decode JWT", e);
+				alert("Gagal decode JWT: " + e);
 			}
 		}
 	}, []);
@@ -67,9 +80,7 @@ export function Welcome({ message }: { message: string }) {
 				<div className="max-w-[300px] w-full space-y-6 px-4">
 					<nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
 						<p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-							{isLoggedIn 
-								? `Welcome, ${email || "User"}!` 
-								: "What's next?"}
+							{isLoggedIn ? `Welcome, ${email || "User"}!` : "What's next?"}
 						</p>
 						<ul>
 							{!isLoggedIn && resources.map(({ href, text, icon }) => (
@@ -84,7 +95,7 @@ export function Welcome({ message }: { message: string }) {
 						</ul>
 						<div className="pt-4 border-t border-gray-200 dark:border-gray-700">
 							{isLoggedIn ? (
-								<button onClick={handleLogout} className="w-full px-6 py-3 bg-red-800 text-white font-semibold rounded-full hover:bg-red-900 transition-colors">
+								<button onClick={handleLogout} className="w-full px-6 py-3 bg-neutral-800 text-white font-semibold rounded-full hover:bg-neutral-900 transition-colors">
 									Logout
 								</button>
 							) : (
