@@ -5,11 +5,22 @@ import logoLight from "./logo-light.svg";
 export function Welcome({ message }: { message: string }) {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [email, setEmail] = useState<string | null>(null);
 
 	useEffect(() => {
 		const session = localStorage.getItem("session");
 		if (session) {
 			setIsLoggedIn(true);
+			try {
+				const payload = JSON.parse(atob(session.split(".")[1]));
+				if (payload.sub && payload.sub.email) {
+					setEmail(payload.sub.email);
+				} else if (payload.email) {
+					setEmail(payload.email);
+				}
+			} catch (e) {
+				console.error("Gagal decode JWT", e);
+			}
 		}
 	}, []);
 
@@ -17,6 +28,7 @@ export function Welcome({ message }: { message: string }) {
 		localStorage.removeItem("session");
 		localStorage.removeItem("code_verifier");
 		setIsLoggedIn(false);
+		setEmail(null);
 	};
 
 	const handleLogin = async () => {
@@ -55,7 +67,9 @@ export function Welcome({ message }: { message: string }) {
 				<div className="max-w-[300px] w-full space-y-6 px-4">
 					<nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
 						<p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-							{isLoggedIn ? "You are logged in!" : "What's next?"}
+							{isLoggedIn 
+								? `Welcome, ${email || "User"}!` 
+								: "What's next?"}
 						</p>
 						<ul>
 							{!isLoggedIn && resources.map(({ href, text, icon }) => (
