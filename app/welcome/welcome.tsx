@@ -4,17 +4,47 @@ import logoLight from "./logo-light.svg";
 
 export function Welcome({ message }: { message: string }) {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [userId, setUserId] = useState<string | null>(null);
+	const [email, setEmail] = useState<string | null>(null);
 
 	useEffect(() => {
-		const session = localStorage.getItem("session");
-		if (session) {
+		const params = new URLSearchParams(window.location.search);
+		const urlUserId = params.get("userId");
+		const urlEmail = params.get("email");
+		const isAuth = params.get("authentication");
+
+		if (isAuth === "true" && urlUserId && urlEmail) {
+			localStorage.setItem("session", urlUserId);
+			localStorage.setItem("email", urlEmail);
+			setUserId(urlUserId);
+			setEmail(urlEmail);
 			setIsLoggedIn(true);
+			window.history.replaceState({}, "", "/");
+		} else {
+			const session = localStorage.getItem("session");
+			const savedEmail = localStorage.getItem("email");
+			if (session) {
+				setUserId(session);
+				setEmail(savedEmail);
+				setIsLoggedIn(true);
+			}
 		}
 	}, []);
 
 	const handleLogout = () => {
 		localStorage.removeItem("session");
+		localStorage.removeItem("email");
 		setIsLoggedIn(false);
+		setUserId(null);
+		setEmail(null);
+	};
+
+	const handleLogin = () => {
+		setIsLoading(true);
+		setTimeout(() => {
+			window.location.href = "https://openauth.readtalk.workers.dev/authorize?response_type=code&redirect_uri=https://asean.readtalk.workers.dev/";
+		}, 500);
 	};
 
 	return (
@@ -37,7 +67,7 @@ export function Welcome({ message }: { message: string }) {
 				<div className="max-w-[300px] w-full space-y-6 px-4">
 					<nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
 						<p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-							{isLoggedIn ? "You are logged in!" : "What's next?"}
+							{isLoggedIn ? `Welcome, ${email || "User"}!` : "What's next?"}
 						</p>
 						<ul>
 							{!isLoggedIn && resources.map(({ href, text, icon }) => (
@@ -54,6 +84,11 @@ export function Welcome({ message }: { message: string }) {
 								</li>
 							))}
 							<li className="self-stretch p-3 leading-normal">{message}</li>
+							{isLoggedIn && (
+								<li className="self-stretch p-3 leading-normal text-sm text-neutral-500">
+									User ID: {userId}
+								</li>
+							)}
 						</ul>
 						<div className="pt-4 border-t border-gray-200 dark:border-gray-700">
 							{isLoggedIn ? (
@@ -65,12 +100,11 @@ export function Welcome({ message }: { message: string }) {
 								</button>
 							) : (
 								<button
-									onClick={() => {
-										window.location.href = "https://openauth.readtalk.workers.dev/authorize?client_id=your-client-id&redirect_uri=https://asean.readtalk.workers.dev/callback&response_type=code&state=/";
-									}}
-									className="w-full px-6 py-3 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 transition-colors"
+									onClick={handleLogin}
+									disabled={isLoading}
+									className="w-full px-6 py-3 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
 								>
-									Login with OpenAuth
+									{isLoading ? "Redirecting..." : "Login with OpenAuth"}
 								</button>
 							)}
 						</div>
