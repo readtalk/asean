@@ -17,7 +17,7 @@ export function loader({ context }: Route.LoaderArgs) {
 		}
 		return { message };
 	} catch (error) {
-		console.error("Error di loader:", error);
+		console.error("Error loader:", error);
 		return { message: "Hello from React Router (fallback)" };
 	}
 }
