@@ -24,9 +24,8 @@ export function Welcome({ message }: { message: string }) {
 				
 				if (payload.properties && payload.properties.email) {
 					setEmail(payload.properties.email);
-					getGravatarUrl(payload.properties.email).then(url => {
-						if (url) setAvatarUrl(url);
-					});
+					const url = getGravatarUrl(payload.properties.email);
+					if (url) setAvatarUrl(url);
 				}
 			} catch (e) {
 				console.error("Gagal decode JWT", e);
