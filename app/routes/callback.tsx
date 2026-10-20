@@ -35,9 +35,11 @@ export default function Callback() {
                     localStorage.setItem("session", data.access_token);
                     navigate(state);
                 } else {
+                    alert("Gagal dapet token: " + JSON.stringify(data));
                     navigate("/");
                 }
             } catch (error) {
+                alert("Error fetch token: " + String(error));
                 navigate("/");
             }
         };
