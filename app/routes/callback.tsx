@@ -35,11 +35,9 @@ export default function Callback() {
                     localStorage.setItem("session", data.access_token);
                     navigate(state);
                 } else {
-                    console.error("Token exchange failed:", data);
                     navigate("/");
                 }
             } catch (error) {
-                console.error("Error exchanging code:", error);
                 navigate("/");
             }
         };
