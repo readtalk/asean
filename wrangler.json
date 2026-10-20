@@ -1,7 +1,7 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"name": "asean",
-	"main": "./build/server/auth.ts",
+	"main": "./workers/app.ts",
 	"compatibility_date": "2025-10-08",
 	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
