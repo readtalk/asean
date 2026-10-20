@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { getGravatarUrl } from "../utils/gravatar-url";
 
 export function Welcome({ message }: { message: string }) {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [email, setEmail] = useState<string | null>(null);
+	const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
 	useEffect(() => {
 		const session = localStorage.getItem("session");
@@ -22,6 +24,9 @@ export function Welcome({ message }: { message: string }) {
 				
 				if (payload.properties && payload.properties.email) {
 					setEmail(payload.properties.email);
+					getGravatarUrl(payload.properties.email).then(url => {
+						if (url) setAvatarUrl(url);
+					});
 				}
 			} catch (e) {
 				console.error("Gagal decode JWT", e);
@@ -34,6 +39,7 @@ export function Welcome({ message }: { message: string }) {
 		localStorage.removeItem("code_verifier");
 		setIsLoggedIn(false);
 		setEmail(null);
+		setAvatarUrl(null);
 	};
 
 	const handleLogin = async () => {
@@ -75,11 +81,24 @@ export function Welcome({ message }: { message: string }) {
 
 				{isLoggedIn ? (
 					<div className="w-full flex flex-col gap-6">
-						<div className="bg-neutral-100 p-4 rounded-xl border border-neutral-200">
-							<p className="text-sm text-neutral-500 mb-1">Masuk sebagai:</p>
-							<p className="font-semibold text-neutral-900 truncate">
-								{email || "User"}
-							</p>
+						<div className="bg-neutral-100 p-6 rounded-xl border border-neutral-200 flex flex-col items-center gap-4">
+							{avatarUrl ? (
+								<img 
+									src={avatarUrl} 
+									alt="Avatar" 
+									className="w-20 h-20 rounded-full object-cover border-2 border-neutral-300"
+								/>
+							) : (
+								<div className="w-20 h-20 rounded-full bg-neutral-300 flex items-center justify-center text-neutral-500 text-2xl font-bold">
+									{email ? email[0].toUpperCase() : "?"}
+								</div>
+							)}
+							<div className="text-center">
+								<p className="text-sm text-neutral-500 mb-1">Masuk sebagai:</p>
+								<p className="font-semibold text-neutral-900 truncate max-w-[250px]">
+									{email || "User"}
+								</p>
+							</div>
 						</div>
 						<button
 							onClick={handleLogout}
