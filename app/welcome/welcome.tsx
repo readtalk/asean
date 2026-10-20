@@ -22,17 +22,11 @@ export function Welcome({ message }: { message: string }) {
 				);
 				const payload = JSON.parse(jsonPayload);
 				
-				alert(JSON.stringify(payload, null, 2));
-				
-				if (payload.email) {
-					setEmail(payload.email);
-				} else if (payload.properties && payload.properties.email) {
+				if (payload.properties && payload.properties.email) {
 					setEmail(payload.properties.email);
-				} else if (payload.sub && typeof payload.sub === 'object' && payload.sub.email) {
-					setEmail(payload.sub.email);
 				}
 			} catch (e) {
-				alert("Gagal decode JWT: " + e);
+				console.error("Gagal decode JWT", e);
 			}
 		}
 	}, []);
