@@ -11,12 +11,11 @@ export default function Callback() {
 
         if (code) {
             console.log("Keep code:", code);
-            
             navigate(state);
         } else {
             navigate("/");
         }
     }, [searchParams, navigate]);
 
-    return <div className="p-4 text-center">Loading...</div>;
+    return <div className="p-4 text-center">Loading login...</div>;
 }
