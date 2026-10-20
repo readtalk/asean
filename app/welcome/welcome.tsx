@@ -4,6 +4,7 @@ import logoLight from "./logo-light.svg";
 
 export function Welcome({ message }: { message: string }) {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		const session = localStorage.getItem("session");
@@ -15,6 +16,13 @@ export function Welcome({ message }: { message: string }) {
 	const handleLogout = () => {
 		localStorage.removeItem("session");
 		setIsLoggedIn(false);
+	};
+
+	const handleLogin = () => {
+		setIsLoading(true);
+		setTimeout(() => {
+			window.location.href = "https://openauth.readtalk.workers.dev/authorize?client_id=your-client-id&redirect_uri=https://asean.readtalk.workers.dev/callback&response_type=code&state=/";
+		}, 500);
 	};
 
 	return (
@@ -65,12 +73,11 @@ export function Welcome({ message }: { message: string }) {
 								</button>
 							) : (
 								<button
-									onClick={() => {
-										window.location.href = "https://openauth.readtalk.workers.dev/authorize?client_id=your-client-id&redirect_uri=https://asean.readtalk.workers.dev/callback&response_type=code&state=/";
-									}}
-									className="w-full px-6 py-3 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 transition-colors"
+									onClick={handleLogin}
+									disabled={isLoading}
+									className="w-full px-6 py-3 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
 								>
-									Login with OpenAuth
+									{isLoading ? "Redirecting..." : "Login with OpenAuth"}
 								</button>
 							)}
 						</div>
