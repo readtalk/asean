@@ -7,15 +7,14 @@ export default function Callback() {
 
     useEffect(() => {
         const code = searchParams.get("code");
-        const state = searchParams.get("state") || "/";
 
         if (code) {
-            console.log("Keep code:", code);
-            navigate(state);
+            localStorage.setItem("session", code);
+            navigate("/");
         } else {
             navigate("/");
         }
     }, [searchParams, navigate]);
 
-    return <div className="p-4 text-center">Loading login...</div>;
+    return <div className="p-4 text-center">Memproses login...</div>;
 }
