@@ -16,7 +16,7 @@ export default function Callback() {
             }
 
             try {
-                const response = await fetch("https://auth.soeparnocorp.workers.dev/password/token", {
+                const response = await fetch("https://auth.soeparnocorp.workers.dev/token", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
