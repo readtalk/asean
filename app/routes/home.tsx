@@ -12,7 +12,7 @@ export function loader({ context }: Route.LoaderArgs) {
 	try {
 		const message = context.cloudflare?.env?.VALUE_FROM_CLOUDFLARE;
 		if (!message) {
-			console.warn("VALUE_FROM_CLOUDFLARE tidak terdefinisi");
+			console.warn("VALUE_FROM_CLOUDFLARE undefinition");
 			return { message: "Hello from React Router (default)" };
 		}
 		return { message };
