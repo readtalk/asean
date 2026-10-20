@@ -1,7 +1,22 @@
+import { useState, useEffect } from "react";
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 
 export function Welcome({ message }: { message: string }) {
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+	useEffect(() => {
+		const session = localStorage.getItem("session");
+		if (session) {
+			setIsLoggedIn(true);
+		}
+	}, []);
+
+	const handleLogout = () => {
+		localStorage.removeItem("session");
+		setIsLoggedIn(false);
+	};
+
 	return (
 		<main className="flex items-center justify-center pt-16 pb-4">
 			<div className="flex-1 flex flex-col items-center gap-16 min-h-0">
@@ -22,10 +37,10 @@ export function Welcome({ message }: { message: string }) {
 				<div className="max-w-[300px] w-full space-y-6 px-4">
 					<nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
 						<p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-							What&apos;s next?
+							{isLoggedIn ? "You are logged in!" : "What's next?"}
 						</p>
 						<ul>
-							{resources.map(({ href, text, icon }) => (
+							{!isLoggedIn && resources.map(({ href, text, icon }) => (
 								<li key={href}>
 									<a
 										className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
@@ -41,14 +56,23 @@ export function Welcome({ message }: { message: string }) {
 							<li className="self-stretch p-3 leading-normal">{message}</li>
 						</ul>
 						<div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-							<button
-								onClick={() => {
-									window.location.href = "https://openauth.readtalk.workers.dev/authorize?client_id=your-client-id&redirect_uri=https://asean.readtalk.workers.dev/callback&response_type=code&state=/";
-								}}
-								className="w-full px-6 py-3 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 transition-colors"
-							>
-								Login with OpenAuth
-							</button>
+							{isLoggedIn ? (
+								<button
+									onClick={handleLogout}
+									className="w-full px-6 py-3 bg-neutral-800 text-white font-semibold rounded-full hover:bg-neutral-900 transition-colors"
+								>
+									Logout
+								</button>
+							) : (
+								<button
+									onClick={() => {
+										window.location.href = "https://openauth.readtalk.workers.dev/authorize?client_id=your-client-id&redirect_uri=https://asean.readtalk.workers.dev/callback&response_type=code&state=/";
+									}}
+									className="w-full px-6 py-3 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 transition-colors"
+								>
+									Login with OpenAuth
+								</button>
+							)}
 						</div>
 					</nav>
 				</div>
