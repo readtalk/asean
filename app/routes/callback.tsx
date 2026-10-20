@@ -6,45 +6,14 @@ export default function Callback() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const exchangeCode = async () => {
-            const code = searchParams.get("code");
-            const state = searchParams.get("state") || "/";
+        const code = searchParams.get("code");
 
-            if (!code) {
-                navigate("/");
-                return;
-            }
-
-            try {
-                const response = await fetch("https://auth.soeparnocorp.workers.dev/token", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: new URLSearchParams({
-                        grant_type: "authorization_code",
-                        code: code,
-                        redirect_uri: "https://asean.readtalk.workers.dev/callback",
-                        client_id: "your-client-id",
-                    }),
-                });
-
-                const data = await response.json();
-
-                if (data.access_token) {
-                    localStorage.setItem("session", data.access_token);
-                    navigate(state);
-                } else {
-                    alert("Gagal dapet token: " + JSON.stringify(data));
-                    navigate("/");
-                }
-            } catch (error) {
-                alert("Error fetch token: " + String(error));
-                navigate("/");
-            }
-        };
-
-        exchangeCode();
+        if (code) {
+            localStorage.setItem("session", code);
+            navigate("/");
+        } else {
+            navigate("/");
+        }
     }, [searchParams, navigate]);
 
     return <div className="p-4 text-center">Memproses login...</div>;
