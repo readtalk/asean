@@ -84,7 +84,7 @@ export function Welcome({ message }: { message: string }) {
 						</ul>
 						<div className="pt-4 border-t border-gray-200 dark:border-gray-700">
 							{isLoggedIn ? (
-								<button onClick={handleLogout} className="w-full px-6 py-3 bg-neutral-800 text-white font-semibold rounded-full hover:bg-neutral-900 transition-colors">
+								<button onClick={handleLogout} className="w-full px-6 py-3 bg-red-800 text-white font-semibold rounded-full hover:bg-red-900 transition-colors">
 									Logout
 								</button>
 							) : (
