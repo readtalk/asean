@@ -51,5 +51,5 @@ export default function Callback() {
         exchangeCode();
     }, [searchParams, navigate]);
 
-    return <div className="p-4 text-center">Memproses login...</div>;
+    return <div className="p-4 text-center">Loading...</div>;
 }
