@@ -7,10 +7,17 @@ export function Welcome({ message }: { message: string }) {
 	const [email, setEmail] = useState<string | null>(null);
 	const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
+	const [username, setUsername] = useState("");
+	const [yourname, setYourname] = useState("");
+	const [date_of_birth, setDateOfBirth] = useState("");
+
+	const [token, setToken] = useState<string | null>(null);
+
 	useEffect(() => {
 		const session = localStorage.getItem("session");
 		if (session) {
 			setIsLoggedIn(true);
+			setToken(session);
 			try {
 				const base64Url = session.split(".")[1];
 				const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -39,11 +46,11 @@ export function Welcome({ message }: { message: string }) {
 		setIsLoggedIn(false);
 		setEmail(null);
 		setAvatarUrl(null);
+		setToken(null);
 	};
 
 	const handleLogin = async () => {
 		setIsLoading(true);
-
 		try {
 			const array = new Uint32Array(56);
 			window.crypto.getRandomValues(array);
@@ -65,6 +72,34 @@ export function Welcome({ message }: { message: string }) {
 		}
 	};
 
+	const handleSubmitProfile = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!username || !yourname || !date_of_birth || !token) return;
+		setIsLoading(true);
+
+		try {
+			const res = await fetch("https://openauth.readtalk.workers.dev/profile", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"Authorization": `Bearer ${token}`
+				},
+				body: JSON.stringify({ username, yourname, date_of_birth })
+			});
+			const data = await res.json();
+			if (data.success) {
+				alert("Profile updated!");
+			} else {
+				alert("Failed: " + data.error);
+			}
+		} catch (error) {
+			console.error(error);
+			alert("Error updating profile");
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
 	return (
 		<main className="flex min-h-screen items-center justify-center bg-neutral-50 p-4">
 			<div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center">
@@ -74,34 +109,74 @@ export function Welcome({ message }: { message: string }) {
 						READTalk
 					</h1>
 					<p className="text-neutral-500 mt-2">
-						{isLoggedIn ? "Anda sudah masuk" : "Selamat datang di ASEAN System"}
+						{isLoggedIn ? "Lengkapi Profil Anda" : "Selamat datang di ASEAN System"}
 					</p>
 				</div>
 
 				{isLoggedIn ? (
 					<div className="w-full flex flex-col gap-6">
-						<div className="bg-neutral-100 p-6 rounded-xl border border-neutral-200 flex flex-col items-center gap-4">
+						<div className="bg-neutral-100 p-4 rounded-xl border border-neutral-200 flex items-center gap-4">
 							{avatarUrl ? (
-								<img 
-									src={avatarUrl} 
-									alt="Avatar" 
-									className="w-20 h-20 rounded-full object-cover border-2 border-neutral-300"
-								/>
+								<img src={avatarUrl} alt="Avatar" className="w-12 h-12 rounded-full object-cover" />
 							) : (
-								<div className="w-20 h-20 rounded-full bg-neutral-300 flex items-center justify-center text-neutral-500 text-2xl font-bold">
+								<div className="w-12 h-12 rounded-full bg-neutral-300 flex items-center justify-center text-neutral-500 text-lg font-bold">
 									{email ? email[0].toUpperCase() : "?"}
 								</div>
 							)}
-							<div className="text-center">
-								<p className="text-sm text-neutral-500 mb-1">Masuk sebagai:</p>
-								<p className="font-semibold text-neutral-900 truncate max-w-[250px]">
-									{email || "User"}
-								</p>
+							<div className="truncate">
+								<p className="text-xs text-neutral-500">Masuk sebagai:</p>
+								<p className="font-semibold text-neutral-900 truncate">{email}</p>
 							</div>
 						</div>
+
+						<form onSubmit={handleSubmitProfile} className="flex flex-col gap-4">
+							<div>
+								<label className="block text-sm font-medium text-neutral-700 mb-1">Username</label>
+								<input
+									type="text"
+									value={username}
+									onChange={(e) => setUsername(e.target.value)}
+									required
+									maxLength={14}
+									pattern="[A-Za-z0-9_]+"
+									className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF0000]"
+									placeholder="@username"
+								/>
+							</div>
+							<div>
+								<label className="block text-sm font-medium text-neutral-700 mb-1">Nama Lengkap</label>
+								<input
+									type="text"
+									value={yourname}
+									onChange={(e) => setYourname(e.target.value)}
+									required
+									className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF0000]"
+									placeholder="Nama Lengkap"
+								/>
+							</div>
+							<div>
+								<label className="block text-sm font-medium text-neutral-700 mb-1">Tanggal Lahir</label>
+								<input
+									type="date"
+									value={date_of_birth}
+									onChange={(e) => setDateOfBirth(e.target.value)}
+									required
+									className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF0000]"
+								/>
+							</div>
+
+							<button
+								type="submit"
+								disabled={isLoading}
+								className="mt-2 w-full h-12 flex items-center justify-center rounded-lg bg-[#FF0000] text-white font-semibold hover:bg-[#CC0000] disabled:opacity-50 transition-colors"
+							>
+								{isLoading ? "Menyimpan..." : "Simpan Profil"}
+							</button>
+						</form>
+
 						<button
 							onClick={handleLogout}
-							className="w-full h-12 flex items-center justify-center rounded-lg bg-neutral-900 text-white font-semibold hover:bg-neutral-800 transition-colors"
+							className="w-full h-10 flex items-center justify-center rounded-lg border border-neutral-300 text-neutral-600 font-semibold hover:bg-neutral-100 transition-colors"
 						>
 							Logout
 						</button>
@@ -109,9 +184,7 @@ export function Welcome({ message }: { message: string }) {
 				) : (
 					<div className="w-full flex flex-col gap-6">
 						<div className="bg-neutral-100 p-6 rounded-xl border border-neutral-200 text-center">
-							<p className="text-sm text-neutral-600 mb-4">
-								{message}
-							</p>
+							<p className="text-sm text-neutral-600 mb-4">{message}</p>
 							<button
 								onClick={handleLogin}
 								disabled={isLoading}
@@ -119,11 +192,6 @@ export function Welcome({ message }: { message: string }) {
 							>
 								{isLoading ? "Redirecting..." : "Login / Register"}
 							</button>
-						</div>
-						
-						<div className="flex justify-between text-sm text-neutral-500">
-							<span>React Router + OpenAuth</span>
-							<span>v1.0</span>
 						</div>
 					</div>
 				)}
