@@ -72,13 +72,13 @@ export function Welcome({ message }: { message: string }) {
 		}
 	};
 
-	const handleSubmitProfile = async (e: React.FormEvent) => {
+	const handleSubmitSettings = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!username || !yourname || !date_of_birth || !token) return;
 		setIsLoading(true);
 
 		try {
-			const res = await fetch("https://openauth.readtalk.workers.dev/profile", {
+			const res = await fetch("https://openauth.readtalk.workers.dev/settings", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -88,13 +88,13 @@ export function Welcome({ message }: { message: string }) {
 			});
 			const data = await res.json();
 			if (data.success) {
-				alert("Profile updated!");
+				alert("Settings updated!");
 			} else {
 				alert("Failed: " + data.error);
 			}
 		} catch (error) {
 			console.error(error);
-			alert("Error updating profile");
+			alert("Error updating settings");
 		} finally {
 			setIsLoading(false);
 		}
@@ -109,7 +109,7 @@ export function Welcome({ message }: { message: string }) {
 						READTalk
 					</h1>
 					<p className="text-neutral-500 mt-2">
-						{isLoggedIn ? "Lengkapi Profil Anda" : "Selamat datang di ASEAN System"}
+						{isLoggedIn ? "Atur Pengaturan Anda" : "Selamat datang di ASEAN System"}
 					</p>
 				</div>
 
@@ -129,7 +129,7 @@ export function Welcome({ message }: { message: string }) {
 							</div>
 						</div>
 
-						<form onSubmit={handleSubmitProfile} className="flex flex-col gap-4">
+						<form onSubmit={handleSubmitSettings} className="flex flex-col gap-4">
 							<div>
 								<label className="block text-sm font-medium text-neutral-700 mb-1">Username</label>
 								<input
@@ -170,7 +170,7 @@ export function Welcome({ message }: { message: string }) {
 								disabled={isLoading}
 								className="mt-2 w-full h-12 flex items-center justify-center rounded-lg bg-[#FF0000] text-white font-semibold hover:bg-[#CC0000] disabled:opacity-50 transition-colors"
 							>
-								{isLoading ? "Menyimpan..." : "Simpan Profil"}
+								{isLoading ? "Menyimpan..." : "Simpan Pengaturan"}
 							</button>
 						</form>
 
