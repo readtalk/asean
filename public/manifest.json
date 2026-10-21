@@ -4,7 +4,7 @@
   "description": "READTalk Messenger",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FF0000",
+  "background_color": "#FFFFFF",
   "theme_color": "#FFFFFF",
   "icons": [
     {
