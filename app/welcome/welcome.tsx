@@ -34,6 +34,20 @@ export function Welcome({ message }: { message: string }) {
 					const url = getGravatarUrl(payload.properties.email);
 					if (url) setAvatarUrl(url);
 				}
+
+				fetch("https://openauth.readtalk.workers.dev/settings", {
+					headers: { "Authorization": `Bearer ${session}` }
+				})
+				.then(res => res.json())
+				.then(data => {
+					if (data.success && data.user) {
+						if (data.user.username) setUsername(data.user.username);
+						if (data.user.yourname) setYourname(data.user.yourname);
+						if (data.user.date_of_birth) setDateOfBirth(data.user.date_of_birth);
+					}
+				})
+				.catch(err => console.error("Failed to fetch settings:", err));
+
 			} catch (e) {
 				console.error("Gagal decode JWT", e);
 			}
