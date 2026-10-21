@@ -18,6 +18,9 @@ export function Welcome({ message }: { message: string }) {
 		if (session) {
 			setIsLoggedIn(true);
 			setToken(session);
+			
+			let ws: WebSocket | null = null;
+
 			try {
 				const base64Url = session.split(".")[1];
 				const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -48,9 +51,21 @@ export function Welcome({ message }: { message: string }) {
 				})
 				.catch(err => console.error("Failed to fetch settings:", err));
 
+				ws = new WebSocket(`wss://openauth.readtalk.workers.dev/ws?token=${session}`);
+				ws.onopen = () => console.log("WS Connected");
+				ws.onmessage = (event) => {
+					const data = JSON.parse(event.data);
+					console.log("WS Message:", data);
+				};
+				ws.onerror = (err) => console.error("WS Error:", err);
+
 			} catch (e) {
 				console.error("Gagal decode JWT", e);
 			}
+
+			return () => {
+				if (ws) ws.close();
+			};
 		}
 	}, []);
 
