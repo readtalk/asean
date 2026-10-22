@@ -1,9 +1,8 @@
-//
 import { Link } from "react-router";
 import { useState, useEffect } from "react";
 import { Phone, LockKey, Globe, Heart, ChatText, CaretDown } from "@phosphor-icons/react";
 
-export default function Welcome() {
+export function Welcome({ message }: { message: string }) {
   const [showLogo, setShowLogo] = useState(true);
 
   useEffect(() => {
@@ -36,6 +35,8 @@ export default function Welcome() {
           <div className="fade-up fade-delay-3 w-full pt-4">
             <Link to="/auth" className="flex w-full h-12 items-center justify-center rounded-full bg-[#FF0000] text-base font-semibold text-white shadow-md transition active:scale-[0.98] hover:bg-[#CC0000]">Agree and continue</Link>
           </div>
+
+          <p className="text-xs text-neutral-400 mt-2">{message}</p>
 
         </div>
       </div>
