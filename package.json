@@ -5,6 +5,8 @@
 		"label": "React Router Framework Starter",
 		"products": [
 			"Workers"
+			"D1"
+			"KV"
 		],
 		"categories": [
 			"storage"
@@ -15,6 +17,7 @@
 	},
 	"dependencies": {
 		"@openauthjs/openauth": "0.4.3",
+		"@phosphor-icons/react": "^2.1.7",
 		"isbot": "5.1.32",
 		"md5": "^2.3.0",
 		"react": "19.2.7",
