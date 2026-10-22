@@ -13,7 +13,7 @@ export function loader({ context }: Route.LoaderArgs) {
 		const message = context.cloudflare?.env?.VALUE_FROM_CLOUDFLARE;
 		if (!message) {
 			console.warn("VALUE_FROM_CLOUDFLARE undefinition");
-			return { message: "Hello from React Router (default)" };
+			return { message: "Powered by SOEPARNO ENTERPRISE Corp." };
 		}
 		return { message };
 	} catch (error) {
