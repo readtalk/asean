@@ -4,8 +4,8 @@
 	"cloudflare": {
 		"label": "React Router Framework Starter",
 		"products": [
-			"Workers"
-			"D1"
+			"Workers",
+			"D1",
 			"KV"
 		],
 		"categories": [
