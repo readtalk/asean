@@ -3,4 +3,5 @@ import { type RouteConfig, index, route } from "@react-router/dev/routes";
 export default [
     index("routes/home.tsx"),
     route("callback", "routes/callback.tsx"),
+    route(":handle", "routes/profile.tsx"),
 ] satisfies RouteConfig;
