@@ -1,3 +1,4 @@
+//
 import { useState, useEffect } from "react";
 import { getGravatarUrl } from "../utils/gravatar-url";
 import { Phone, LockKey, Globe, Heart, ChatText, CaretDown } from "@phosphor-icons/react";
