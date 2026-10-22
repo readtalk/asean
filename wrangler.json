@@ -9,7 +9,7 @@
 	},
 	"upload_source_maps": true,
 	"vars": {
-		"VALUE_FROM_CLOUDFLARE": "SOEPARNO ENTERPRISE Corp."
+		"OPENAUTH": "aHR0cHM6Ly9vcGVuYXV0aC5yZWFkdGFsay53b3JrZXJzLmRldi8="
 	},
 	"d1_databases": [
 		{
