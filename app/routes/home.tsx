@@ -13,7 +13,7 @@ export function loader({ context }: Route.LoaderArgs) {
 		const message = context.cloudflare?.env?.VALUE_FROM_CLOUDFLARE;
 		if (!message) {
 			console.warn("VALUE_FROM_CLOUDFLARE undefinition");
-			return { message: "Powered by SOEPARNO ENTERPRISE Corp." };
+			return { message: "Hello from Cloudflare" };
 		}
 		return { message };
 	} catch (error) {
