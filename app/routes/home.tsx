@@ -10,14 +10,18 @@ export function meta({}: Route.MetaArgs) {
 
 export function loader({ context }: Route.LoaderArgs) {
 	try {
-		const openAuthUrl = context.cloudflare?.env?.OPENAUTH || "https://openauth.readtalk.workers.dev";
-		return { openAuthUrl };
+		const message = context.cloudflare?.env?.VALUE_FROM_CLOUDFLARE;
+		if (!message) {
+			console.warn("VALUE_FROM_CLOUDFLARE undefinition");
+			return { message: "Cloudflare (default)" };
+		}
+		return { message };
 	} catch (error) {
 		console.error("Error loader:", error);
-		return { openAuthUrl: "https://openauth.readtalk.workers.dev" };
+		return { message: "Cloudflare (fallback)" };
 	}
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-	return <Welcome openAuthUrl={loaderData.openAuthUrl} />;
+	return <Welcome message={loaderData.message} />;
 }
