@@ -48,7 +48,7 @@ export function Welcome({ message }: { message: string }) {
 					if (url) setAvatarUrl(url);
 				}
 
-				fetch("https://openauth.readtalk.workers.dev/settings", {
+				fetch("https://auth.readtalk.workers.dev/settings", {
 					headers: { "Authorization": `Bearer ${session}` }
 				})
 				.then(res => res.json())
@@ -61,7 +61,7 @@ export function Welcome({ message }: { message: string }) {
 				})
 				.catch(err => console.error("Failed to fetch settings:", err));
 
-				ws = new WebSocket(`wss://openauth.readtalk.workers.dev/ws?token=${session}`);
+				ws = new WebSocket(`wss://auth.readtalk.workers.dev/ws?token=${session}`);
 				ws.onopen = () => console.log("WS Connected");
 				ws.onmessage = (event) => {
 					const data = JSON.parse(event.data);
@@ -70,7 +70,7 @@ export function Welcome({ message }: { message: string }) {
 				ws.onerror = (err) => console.error("WS Error:", err);
 
 			} catch (e) {
-				console.error("Gagal decode JWT", e);
+				console.error("Failed decode JWT", e);
 			}
 
 			return () => {
@@ -168,14 +168,14 @@ export function Welcome({ message }: { message: string }) {
 							</div>
 							<div>
 								<label className="block text-sm font-medium text-neutral-700 mb-1">Your name</label>
-								<input type="text" value={yourname} onChange={(e) => setYourname(e.target.value)} required className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF0000]" placeholder="Nama Lengkap" />
+								<input type="text" value={yourname} onChange={(e) => setYourname(e.target.value)} required className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF0000]" placeholder="Full Name" />
 							</div>
 							<div>
 								<label className="block text-sm font-medium text-neutral-700 mb-1">Date of birth</label>
 								<input type="date" value={date_of_birth} onChange={(e) => setDateOfBirth(e.target.value)} required className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF0000]" />
 							</div>
 							<button type="submit" disabled={isLoading} className="mt-2 w-full h-12 flex items-center justify-center rounded-lg bg-[#FF0000] text-white font-semibold hover:bg-[#CC0000] disabled:opacity-50 transition-colors">
-								{isLoading ? "Saved..." : "Save"}
+								{isLoading ? "Saving..." : "Saved"}
 							</button>
 						</form>
 						<button onClick={handleLogout} className="w-full h-10 flex items-center justify-center rounded-lg border border-neutral-300 text-neutral-600 font-semibold hover:bg-neutral-100 transition-colors">
