@@ -9,7 +9,7 @@
 	},
 	"upload_source_maps": true,
 	"vars": {
-		"OPENAUTH": "https://auth.readtalk.workers.dev"
+		"VALUE_FROM_CLOUDFLARE": "Cloudflare"
 	},
 	"d1_databases": [
 		{
