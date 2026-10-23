@@ -145,7 +145,7 @@ export function Welcome({ message }: { message: string }) {
 				<div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center">
 					<div className="w-full text-center mb-8">
 						<h1 className="text-3xl font-extrabold text-[#FF0000] tracking-tight">READTalk</h1>
-						<p className="text-neutral-500 mt-2">Settings</p>
+						<p className="text-neutral-500 mt-2">Settings Account</p>
 					</div>
 					<div className="w-full flex flex-col gap-6">
 						<div className="bg-neutral-100 p-4 rounded-xl border border-neutral-200 flex items-center gap-4">
@@ -163,15 +163,15 @@ export function Welcome({ message }: { message: string }) {
 						</div>
 						<form onSubmit={handleSubmitSettings} className="flex flex-col gap-4">
 							<div>
-								<label className="block text-sm font-medium text-neutral-700 mb-1">Username</label>
+								<label className="block text-sm font-medium text-neutral-700 mb-1">@username</label>
 								<input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required maxLength={14} pattern="[A-Za-z0-9_]+" className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF0000]" placeholder="@username" />
 							</div>
 							<div>
-								<label className="block text-sm font-medium text-neutral-700 mb-1">Nama Lengkap</label>
+								<label className="block text-sm font-medium text-neutral-700 mb-1">Your Name</label>
 								<input type="text" value={yourname} onChange={(e) => setYourname(e.target.value)} required className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF0000]" placeholder="Nama Lengkap" />
 							</div>
 							<div>
-								<label className="block text-sm font-medium text-neutral-700 mb-1">Tanggal Lahir</label>
+								<label className="block text-sm font-medium text-neutral-700 mb-1">Date Of Birth</label>
 								<input type="date" value={date_of_birth} onChange={(e) => setDateOfBirth(e.target.value)} required className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF0000]" />
 							</div>
 							<button type="submit" disabled={isLoading} className="mt-2 w-full h-12 flex items-center justify-center rounded-lg bg-[#FF0000] text-white font-semibold hover:bg-[#CC0000] disabled:opacity-50 transition-colors">
