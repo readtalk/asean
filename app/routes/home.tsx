@@ -1,3 +1,4 @@
+//
 import type { Route } from "./+types/home";
 import { Welcome } from "./auth/welcome";
 
