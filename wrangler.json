@@ -9,7 +9,7 @@
 	},
 	"upload_source_maps": true,
 	"vars": {
-		"OPENAUTH": "aHR0cHM6Ly9vcGVuYXV0aC5yZWFkdGFsay53b3JrZXJzLmRldi8="
+		"OPENAUTH": "https://openauth.readtalk.workers.dev"
 	},
 	"d1_databases": [
 		{
