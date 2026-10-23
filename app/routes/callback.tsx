@@ -1,17 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import type { Route } from "./+types/callback";
 
-export function loader({ context }: Route.LoaderArgs) {
-	try {
-		const openAuthUrl = context.cloudflare?.env?.OPENAUTH || "https://openauth.readtalk.workers.dev";
-		return { openAuthUrl };
-	} catch (error) {
-		return { openAuthUrl: "https://openauth.readtalk.workers.dev" };
-	}
-}
-
-export default function Callback({ loaderData }: Route.ComponentProps) {
+export default function Callback() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const hasExchanged = useRef(false);
@@ -30,7 +20,7 @@ export default function Callback({ loaderData }: Route.ComponentProps) {
 
             try {
                 const verifier = localStorage.getItem("code_verifier") || "";
-                const response = await fetch(`${loaderData.openAuthUrl}/token`, {
+                const response = await fetch("https://openauth.readtalk.workers.dev/token", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
@@ -59,7 +49,7 @@ export default function Callback({ loaderData }: Route.ComponentProps) {
         };
 
         exchangeCode();
-    }, [searchParams, navigate, loaderData.openAuthUrl]);
+    }, [searchParams, navigate]);
 
     return <div className="p-4 text-center">Loading...</div>;
 }
