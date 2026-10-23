@@ -3,6 +3,6 @@ import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
 export default [
     index("routes/home.tsx"),
-    route("welcome", "routes/auth/welcome.tsx"),
+    route("welcome", "/auth/welcome.tsx"),
     route("callback", "routes/auth/callback.tsx"),    
 ] satisfies RouteConfig;
