@@ -10,8 +10,7 @@ export function meta({}: Route.MetaArgs) {
 
 export function loader({ context }: Route.LoaderArgs) {
 	try {
-		const encodedUrl = context.cloudflare?.env?.OPENAUTH || "";
-		const openAuthUrl = atob(encodedUrl).replace(/\/$/, "");
+		const openAuthUrl = context.cloudflare?.env?.OPENAUTH || "https://openauth.readtalk.workers.dev";
 		return { openAuthUrl };
 	} catch (error) {
 		console.error("Error loader:", error);
