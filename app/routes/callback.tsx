@@ -4,8 +4,7 @@ import type { Route } from "./+types/callback";
 
 export function loader({ context }: Route.LoaderArgs) {
 	try {
-		const encodedUrl = context.cloudflare?.env?.OPENAUTH || "";
-		const openAuthUrl = atob(encodedUrl).replace(/\/$/, "");
+		const openAuthUrl = context.cloudflare?.env?.OPENAUTH || "https://openauth.readtalk.workers.dev";
 		return { openAuthUrl };
 	} catch (error) {
 		return { openAuthUrl: "https://openauth.readtalk.workers.dev" };
