@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getGravatarUrl } from "../utils/gravatar-url";
 import { Phone, LockKey, Globe, Heart, ChatText, CaretDown } from "@phosphor-icons/react";
 
-export function Welcome({ openAuthUrl }: { openAuthUrl: string }) {
+export function Welcome({ message }: { message: string }) {
 	const [showLogo, setShowLogo] = useState(true);
 	
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -48,7 +48,7 @@ export function Welcome({ openAuthUrl }: { openAuthUrl: string }) {
 					if (url) setAvatarUrl(url);
 				}
 
-				fetch(`${openAuthUrl}/settings`, {
+				fetch("https://auth.readtalk.workers.dev/settings", {
 					headers: { "Authorization": `Bearer ${session}` }
 				})
 				.then(res => res.json())
@@ -61,8 +61,7 @@ export function Welcome({ openAuthUrl }: { openAuthUrl: string }) {
 				})
 				.catch(err => console.error("Failed to fetch settings:", err));
 
-				const wsUrl = openAuthUrl.replace(/^http/, 'ws');
-				ws = new WebSocket(`${wsUrl}/ws?token=${session}`);
+				ws = new WebSocket(`wss://auth.readtalk.workers.dev/ws?token=${session}`);
 				ws.onopen = () => console.log("WS Connected");
 				ws.onmessage = (event) => {
 					const data = JSON.parse(event.data);
@@ -71,14 +70,14 @@ export function Welcome({ openAuthUrl }: { openAuthUrl: string }) {
 				ws.onerror = (err) => console.error("WS Error:", err);
 
 			} catch (e) {
-				console.error("Gagal decode JWT", e);
+				console.error("failed decode JWT", e);
 			}
 
 			return () => {
 				if (ws) ws.close();
 			};
 		}
-	}, [openAuthUrl]);
+	}, []);
 
 	const handleLogout = () => {
 		localStorage.removeItem("session");
@@ -104,7 +103,7 @@ export function Welcome({ openAuthUrl }: { openAuthUrl: string }) {
 			localStorage.setItem("code_verifier", verifier);
 
 			setTimeout(() => {
-				window.location.href = `${openAuthUrl}/authorize?response_type=code&client_id=your-client-id&redirect_uri=https://asean.readtalk.workers.dev/callback&code_challenge=${challenge}&code_challenge_method=S256`;
+				window.location.href = `https://auth.readtalk.workers.dev/authorize?response_type=code&client_id=your-client-id&redirect_uri=https://asean.readtalk.workers.dev/callback&code_challenge=${challenge}&code_challenge_method=S256`;
 			}, 500);
 		} catch (error) {
 			console.error(error);
@@ -118,7 +117,7 @@ export function Welcome({ openAuthUrl }: { openAuthUrl: string }) {
 		setIsLoading(true);
 
 		try {
-			const res = await fetch(`${openAuthUrl}/settings`, {
+			const res = await fetch("https://auth.readtalk.workers.dev/settings", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -146,7 +145,7 @@ export function Welcome({ openAuthUrl }: { openAuthUrl: string }) {
 				<div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center">
 					<div className="w-full text-center mb-8">
 						<h1 className="text-3xl font-extrabold text-[#FF0000] tracking-tight">READTalk</h1>
-						<p className="text-neutral-500 mt-2">Atur Pengaturan Anda</p>
+						<p className="text-neutral-500 mt-2">Settings</p>
 					</div>
 					<div className="w-full flex flex-col gap-6">
 						<div className="bg-neutral-100 p-4 rounded-xl border border-neutral-200 flex items-center gap-4">
@@ -158,7 +157,7 @@ export function Welcome({ openAuthUrl }: { openAuthUrl: string }) {
 								</div>
 							)}
 							<div className="truncate">
-								<p className="text-xs text-neutral-500">Masuk sebagai:</p>
+								<p className="text-xs text-neutral-500">Account:</p>
 								<p className="font-semibold text-neutral-900 truncate">{email}</p>
 							</div>
 						</div>
@@ -176,7 +175,7 @@ export function Welcome({ openAuthUrl }: { openAuthUrl: string }) {
 								<input type="date" value={date_of_birth} onChange={(e) => setDateOfBirth(e.target.value)} required className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF0000]" />
 							</div>
 							<button type="submit" disabled={isLoading} className="mt-2 w-full h-12 flex items-center justify-center rounded-lg bg-[#FF0000] text-white font-semibold hover:bg-[#CC0000] disabled:opacity-50 transition-colors">
-								{isLoading ? "Menyimpan..." : "Simpan Pengaturan"}
+								{isLoading ? "Data saved..." : "Save"}
 							</button>
 						</form>
 						<button onClick={handleLogout} className="w-full h-10 flex items-center justify-center rounded-lg border border-neutral-300 text-neutral-600 font-semibold hover:bg-neutral-100 transition-colors">
@@ -224,15 +223,25 @@ export function Welcome({ openAuthUrl }: { openAuthUrl: string }) {
 							{isLoading ? "Redirecting..." : "Agree and continue"}
 						</button>
 					</div>
+
+					<p className="text-xs text-neutral-400 mt-2">{message}</p>
 				</div>
 			</div>
 
 			<style>{`
 				@keyframes fadeUp {
-					from { opacity: 0; transform: translateY(12px); }
-					to { opacity: 1; transform: translateY(0); }
+					from {
+						opacity: 0;
+						transform: translateY(12px);
+					}
+					to {
+						opacity: 1;
+						transform: translateY(0);
+					}
 				}
-				.fade-up { animation: fadeUp 0.5s ease-out both; }
+				.fade-up {
+					animation: fadeUp 0.5s ease-out both;
+				}
 				.fade-delay-1 { animation-delay: 0.1s; }
 				.fade-delay-2 { animation-delay: 0.2s; }
 				.fade-delay-3 { animation-delay: 0.3s; }
