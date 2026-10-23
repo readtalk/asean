@@ -20,7 +20,7 @@ export default function Callback() {
 
             try {
                 const verifier = localStorage.getItem("code_verifier") || "";
-                const response = await fetch("https://openauth.readtalk.workers.dev/token", {
+                const response = await fetch("https://auth.readtalk.workers.dev/token", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
